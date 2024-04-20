@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="https://code.responsivevoice.org/responsivevoice.js?key=tcikdKjS"></script>
+  <script>
+    // Populate the pageContent variable with the content_data.content from Jinja
+    var pageContent = "{{ content_data.content }}";
+  </script>  
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/static/style.css">
+  <title>Your Cryptography Learning App</title> 
+</head>
+
+<body>
+  <header>
+    <div class="banner">
+      <h2>Content Page </h2>
+      <div class="navigation-buttons">
+        <nav>
+          <button onclick="goToHome()">Home</button>
+          <button onclick="goToProfile()">Profile</button>
+          <button onclick="goToLogout()">Logout</button>
+        </nav>
+      </div>
+    </div>
+  </header>
+  <div class="progress">
+    <div class="progress-bar" role="progressbar" style="width: {{ progress }}%;" aria-valuenow="{{ progress }}" aria-valuemin="0" aria-valuemax="100"></div>
+  </div>
+  <div style="clear:both;"></div>
+  <nav id="moduleList">
+    <table class="module-table">
+      <tr>
+        <th>Module List</th>
+      </tr>
+    <tr onclick="toggleModuleDropdown('module1')">
+      <td>Module 1: The Start of Cryptograph</td>
+    </tr>
+    <tr>  
+      <td id="module1Dropdown" class="module-dropdown">
+        <select onchange="updateSession('1', this.value)">
+          <option value="1">Where it all started</option>
+          <option value="2">Caesar Cipher</option>
+          <option value="3">Vigenere Cipher</option>
+          <option value="4">Rail Fence Cipher</option>
+        </select>
+        
+      </td>
+    </tr>
+    <tr onclick="toggleModuleDropdown('module2')">
+      <td>Module 2: Where it is now</td>
+    </tr>
+    <tr>
+      <td id="module2Dropdown" class="module-dropdown">
+        <select onchange="updateSession('2', this.value)">
+          <option value="1">Symmetrical and Asymmetrical</option>
+          <option value="2">Block Cipher and Stream Cipher</option>
+          <option value="3">One-Time Pad</option>
+          <option value="4">Diffie-Hellman Key Exchange Protocol</option> 
+        </select>
+      </td>
+    </tr>
+    <tr onclick="toggleModuleDropdown('module3')">
+      <td>Module 3: Advanced Encryption Standard (AES)</td>
+    </tr>
+    <tr>
+      <td id="module3Dropdown" class="module-dropdown">
+        <select onchange="updateSession('3', this.value)">
+          <option value="1">AES Operations and Process</option>
+          <option value="2">Electronic Codebook (ECB) Mode</option>
+          <option value="3">Cipher Block Chaining (CBC) Mode</option>
+          <option value="4">Counter (CTR) Mode</option> 
+        </select>
+      </td>
+    </tr>
+      <tr onclick="toggleModuleDropdown('module4')">
+      <td>Module 4: Hashing</td>
+    </tr>
+    <tr>
+      <td id="module4Dropdown" class="module-dropdown">
+        <select onchange="updateSession('4', this.value)">
+          <option value="1">What is a Hashing Algorithm</option>
+          <option value="2">Strength of hashing</option>
+          <option value="3">Different types</option>
+          <option value="4">When and where its used</option>
+        </select>
+      </td>
+    </tr>
+    <tr onclick="toggleModuleDropdown('module5')">
+      <td>Module 5: Key Management</td>
+    </tr>
+    <tr>
+      <td id="module5Dropdown" class="module-dropdown">
+        <select onchange="updateSession('5', this.value)">
+          <option value="1">Importance of Key Management</option>
+          <option value="2">Key Generation</option>
+          <option value="3">Key Storage</option>
+          <option value="4">Key Life cycle diagram</option>
+        </select>
+      </td>
+    </tr>
+    </table>
+  </nav>
+  <main>
+
+    <div id="content">
+      <h1 id="sectionTitle">{{ content_data.title }}</h1>
+      <p id="narrative">{{ content_data.narrative }}</p>
+
+
+      <div class="audio-button-container">
+        <button id="audioFemaleBtn" onclick="responsiveVoice.speak(pageContent, 'US English Female')">Audio Female</button>
+        <button id="audioMaleBtn" onclick="responsiveVoice.speak(pageContent, 'US English Male')">Audio Male</button>
+      </div>
+      <div id="pageContent">{{ content_data.content }}</div>
+
+
+      {% if content_data.image != None%}
+        <img id="sectionImage" src="{{content_data.image}}" alt="Image">
+      {%endif%}
+      <div class="video-container">
+        {% if content_data.video_url is not none %}
+            <iframe size="100" src="{{ content_data.video_url }}" frameborder="0" allowfullscreen></iframe>
+        {% endif %}
+    </div>
+    
+      {% if content_data.interactive_component %}
+      <div class="interactive-component-container">
+        <h2>{{ content_data.title }}</h2>
+        {% for input_field in content_data.interactive_component.input_fields %}
+        <label for="{{ input_field.id }}">{{ input_field.label }}:</label>
+        <input type="{{ input_field.type }}" id="{{ input_field.id }}">
+        {% endfor %}
+        <button onclick="handleSubmit('{{ content_data.function_name }}')">Submit</button>
+        <p id="result">Results: {{result}}</p>
+    </div>
+      
+      <script src="static/Module1/interactive.js"></script>
+      <script>
+          // Function to handle submission with dynamic function name
+          function handleSubmit(functionName) {
+              // Retrieve the values from the input fields
+              const inputValues = {};
+              {% for input_field in content_data.interactive_component.input_fields %}
+              const {{ input_field.id }}Element = document.getElementById('{{ input_field.id }}');
+              inputValues['{{ input_field.id }}'] = {{ input_field.id }}Element.value;
+              {% endfor %}
+      
+              // Declare an array to store arguments
+              const args = [];
+      
+              // Iterate over input fields and store their values in the args array
+              {% for input_field in content_data.interactive_component.input_fields %}
+                  args.push(inputValues['{{ input_field.id }}']);
+              {% endfor %}
+      
+              // Declare shiftAmount variable
+              let shiftAmount;
+      
+              // Find and parse shiftAmount if it exists
+              if ('caesarShift' in inputValues) {
+                  shiftAmount = parseInt(inputValues['caesarShift']);
+                  // Check if shiftAmount is a valid number
+                  if (isNaN(shiftAmount)) {
+                      // If shiftAmount is not a valid number, return an error message
+                      document.getElementById('result').textContent = 'Error: Shift amount must be a valid number.';
+                      return;
+                  }
+              }
+              
+              let numOfRails;
+              if ('numRails' in inputValues) {
+                numOfRails = parseInt(inputValues['numRails']);
+                // Check if shiftAmount is a valid number
+                if (isNaN(numOfRails)) {
+                    // If shiftAmount is not a valid number, return an error message
+                    document.getElementById('result').textContent = 'Error: Rail amount must be a valid number.';
+                    return;
+                }
+            }
+      
+              // Call the specified function with the retrieved values
+              if (functionName in window) {
+                  let result;
+                  if ('caesarShift' in inputValues) {
+                      // If shiftAmount is defined, call the function with it
+                      result = window[functionName](...args, shiftAmount);
+                  } else {
+                      // If shiftAmount is not defined, call the function without it
+                      result = window[functionName](...args);
+                  }
+      
+                  if (result !== undefined && result !== null) {
+                      document.getElementById('result').textContent = result.toString(); // Convert to string before updating the result element
+                  } else {
+                      console.error("Returned value is undefined or null.");
+                  }
+              } else {
+                  console.error("Function name not found or not defined.");
+              }
+          }
+      </script>
+      {% endif %}
+
+      
+  </div>
+  
+  </main>
+  
+  <footer class="navigation-arrows">
+    <div class="buttons-container">
+    <form action="/prev_page" method="GET">
+        <button class="arrow-button" type="submit">◄ Prev </button>
+    </form>
+    <span class="separator">|</span>
+    <form action="/next_page" method="GET">
+        <button class="arrow-button" type="submit">Next ►</button>
+    </form>
+    {% if completed_module == True %}
+        <form action="/quiz" method="GET">
+            <button class="quiz-button" type="submit">Take Quiz</button>
+        </form>
+    {% endif %}
+</footer>
+
+<script>
+
+  function goToHome() {
+    window.location.href = '/';
+  }
+
+  function goToProfile(){
+    window.location.href= 'profile';
+  }
+
+  function goToLogin() {
+    window.location.href = '/login';
+  }
+
+  function goToLogout(){
+    window.location.href= '/logout';
+  }
+  
+  function loadModule(moduleId) {
+    // Hide all modules and dropdowns
+    var modules = document.querySelectorAll('.module-content');
+    modules.forEach(function(module) {
+      module.style.display = 'none';
+    });
+
+    var dropdowns = document.querySelectorAll('.module-dropdown');
+    dropdowns.forEach(function(dropdown) {
+      dropdown.style.display = 'none';
+    });
+
+    // Show the selected module
+    var selectedModule = document.getElementById(moduleId);
+    if (selectedModule) {
+      selectedModule.style.display = 'block';
+    }
+  }
+
+  function toggleModuleDropdown(moduleId) {
+    // Toggle the visibility of the dropdown for the selected module
+    var dropdown = document.getElementById(moduleId + 'Dropdown');
+    if (dropdown) {
+      dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
+    }
+  }
+
+  function updateSession(moduleNum, topicNum) {
+    // Update session variables
+    fetch(`/update_session/${moduleNum}/${topicNum}`)
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Failed to update session variables');
+        }
+        // Redirect to the content page
+        window.location.href = '/content';
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+</script>
+</body>
+</html>

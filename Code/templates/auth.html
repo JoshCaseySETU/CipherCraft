@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/static/style.css">
+  <title>{% if is_login %}Your Cryptography Learning App - Login{% else %}Your Cryptography Learning App - Sign Up{% endif %}</title>
+</head>
+<body>
+  <header>
+    <div class="banner">
+      <h2>{% if is_login %}Login Page{% else %}Sign Up Page{% endif %}</h2>
+      <div class="navigation-buttons">
+        <nav>
+          <button onclick="goToHome()">Home</button>
+        </nav>
+      </div>
+    </div>
+  </header>
+  <main>
+    {% if is_login %}
+    <div class="login-form">
+      <h2>Login</h2>
+      {% if error %}
+        <p style="color: red;">{{ error }}</p>
+      {% endif %}
+      <form id="loginForm" method="POST">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+        <button type="submit">Login</button>
+      </form>
+    </div>
+    {% else %}
+    <div class="signUp-form">
+      <h2>Sign Up</h2>
+      {% if error %}
+        <p style="color: red;">{{ error }}</p>
+      {% endif %}
+      <form id="signUpForm" method="POST">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required>
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+        <label for="confirmEmail">Confirm Email:</label>
+        <input type="email" id="confirmEmail" name="confirmEmail" required>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+        <label for="confirmPassword">Confirm Password:</label>
+        <input type="password" id="confirmPassword" name="confirmPassword" required>
+        <button type="submit">Sign Up</button>
+      </form>
+    </div>
+    {% endif %}
+  </main>
+  <footer>
+    <p> CipherCraft 2024</p>
+  </footer>
+</body>
+</html>
+<script>
+  function goToHome() {
+    window.location.href = '/';
+  }
+</script>

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/static/style.css">
+  <title>Your Cryptography Learning App : By Josh Casey</title>
+</head>
+<body>
+  <header>
+    <div class="banner">
+      <h2>CipherCraft Your Cryptography Learning App - By Josh Casey</h2>
+      <div class="navigation-buttons">
+        {% if session.get('authenticated') %}
+          <div id="courseProfileButtons">
+            <button onclick="goToCourseContent()">Course</button>
+            <button onclick="goToProfile()">Profile</button>
+            <button onclick="logout()">Logout</button>
+          </div>
+        {% else %}
+          <button onclick="goToSignUp()">Sign Up</button>
+          <button onclick="goToLogin()">Login</button>
+        {% endif %}
+      </div>
+    </div>
+  </header>
+  <main>
+    <div class="brief-description">
+      {% if session.get('authenticated') %}
+        <h2>Welcome Back!</h2><br>
+        <p>Continue your cryptography journey with CipherCraft, or explore other resources like CrypTool and CryptoPals for further learning.</p><br>
+        <p>Hit the course button to continue learning with CipherCraft, or explore alternative resources to expand your knowledge.</p><br>
+      {% else %}
+        <h2>Welcome to CipherCraft!</h2><br>
+        <p>Embark on your cryptography journey with CipherCraft, a learning platform covering various topics in cryptography.</p><br>
+        <p>Explore the exciting world of cryptography through our structured courses.</p><br>
+        <p>Sign up or log in now to start your cryptography journey!</p><br>
+      {% endif %}
+    </div>
+  
+    <div class="module-info">
+      <h3>Module 1: The Start of Cryptography</h3>
+      <p><strong>Topics:</strong></p>
+      <ul>
+        <li>Why it began? - Brief History of why cryptography was invented</li>
+        <li>Caesar Cipher</li>
+        <li>Vigenère Cipher</li>
+        <li>Fence Cipher</li>
+      </ul>
+      <p><strong>Breakdown:</strong></p>
+      <p>The first module provides a brief history of cryptography and introduces foundational ciphers such as the Caesar, Vigenère, and Fence ciphers.</p>
+    </div>
+  
+    <div class="module-info">
+      <h3>Module 2: Where it is now</h3>
+      <p><strong>Topics:</strong></p>
+      <ul>
+        <li>Symmetrical and Asymmetrical</li>
+        <li>Block Ciphers and Stream Ciphers</li>
+        <li>One-Time Pad</li>
+        <li>Methods of Key Exchange - Diffie-Hellman key exchange protocol</li>
+      </ul>
+      <p><strong>Breakdown:</strong></p>
+      <p>Module two explores modern encryption methods including symmetrical and asymmetrical cryptography, block ciphers, stream ciphers, and key exchange protocols like Diffie-Hellman.</p>
+    </div>
+  
+    <div class="module-info">
+      <h3>Module 3: Advanced Encryption Standard (AES)</h3>
+      <p><strong>Topics:</strong></p>
+      <ul>
+        <li>AES Process</li>
+        <li>Electronic Codebook (ECB) Mode</li>
+        <li>Cipher Block Chaining (CBC) Mode</li>
+        <li>Counter (CTR) Mode</li>
+      </ul>
+      <p><strong>Breakdown:</strong></p>
+      <p>Module three delves into the Advanced Encryption Standard (AES), explaining its operation, different modes such as ECB, CBC, and CTR, and their respective advantages and disadvantages.</p>
+    </div>
+  
+    <div class="module-info">
+      <h3>Module 4: Hashing Algorithms</h3>
+      <p><strong>Topics:</strong></p>
+      <ul>
+        <li>What is a Hashing Algorithm</li>
+        <li>Strength of hashing</li>
+        <li>Different types - SHA1, MD5, SHA256</li>
+        <li>When and where it’s used</li>
+      </ul>
+      <p><strong>Breakdown:</strong></p>
+      <p>Module four focuses on hashing algorithms, their properties, different types such as SHA1, MD5, SHA256, and their applications in securing passwords, files, and maintaining data integrity.</p>
+    </div>
+  
+    <div class="module-info">
+      <h3>Module 5: Key Management</h3>
+      <p><strong>Topics:</strong></p>
+      <ul>
+        <li>Importance of Key Management</li>
+        <li>Key Generation</li>
+        <li>Key Storage</li>
+        <li>Key Life cycle diagram</li>
+      </ul>
+      <p><strong>Breakdown:</strong></p>
+      <p>The final module emphasizes the importance of key management, covering key generation, storage methods, and the life cycle of a key including rotation, revocation, and expiration.</p>
+    </div>
+  </main>
+  
+  
+  <footer>
+    <p> CipherCraft 2024</p>
+  </footer>
+  <script>
+    function goToSignUp() {
+      window.location.href = '/signUp';
+    }
+    function goToLogin() {
+      window.location.href = '/login';
+    }
+    function goToCourseContent() {
+      window.location.href = '/content'; 
+    }
+    function goToProfile() {
+      window.location.href = '/profile'; 
+    }
+    function logout() {
+      window.location.href = '/logout';
+    }
+  </script>
+</body>
+</html>

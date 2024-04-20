@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/style.css">
+
+    
+    <title>Quiz</title>
+</head>
+<body>
+    <header>
+        <h1>Quiz</h1>
+    </header>
+    <div class="progress">
+        <div class="progress-bar" role="progressbar" style="width: {{ progress }}%;" aria-valuenow="{{ progress }}" aria-valuemin="0" aria-valuemax="100"></div>
+      </div>
+    <main>
+        <div class="question">
+            <p>Question {{ current_question_index }}:</p>
+            <p>{{ current_question['Question'] }}</p>
+            <form method="post" action="">
+                <input type="hidden" name="question_index" value="{{ current_question_index }}">
+                <input type="hidden" name="selected_option" id="selected_option">
+                <div class="options">
+                    <div class="option {% if selected_option == 'Option1' %}selected{% endif %}" data-value="Option 1">{{ current_question['Option1'] }}</div>
+                    <div class="option {% if selected_option == 'Option2' %}selected{% endif %}" data-value="Option 2">{{ current_question['Option2'] }}</div>
+                    <div class="option {% if selected_option == 'Option3' %}selected{% endif %}" data-value="Option 3">{{ current_question['Option3'] }}</div>
+                    <div class="option {% if selected_option == 'Option4' %}selected{% endif %}" data-value="Option 4">{{ current_question['Option4'] }}</div>
+                </div>
+                
+            </form> 
+          
+        </div>
+        <div class="quiz-buttons">
+            {% if prev_question %}
+                <button class="quiz-button" onclick="window.location='/quiz/{{ module_number }}/{{ prev_question }}'">&#8592; Previous</button>
+            {% endif %}
+            {% if next_question %}
+                <button class="quiz-button" onclick="window.location='/quiz/{{ module_number }}/{{ next_question }}'">Next &#8594;</button>
+            {% else %}
+                <button class="quiz-button" onclick="window.location='/results'">Results</button>
+            {% endif %}
+        </div>
+    </main>
+    <footer>
+        &copy; 2024 Your CipherCraft | All rights reserved
+    </footer>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add click event listener to options
+            document.querySelectorAll('.option').forEach(option => {
+                option.addEventListener('click', function() {
+                    // Remove 'selected' class from all options
+                    document.querySelectorAll('.option').forEach(opt => {
+                        opt.classList.remove('selected');
+                    });
+        
+                    // Add 'selected' class to the clicked option
+                    this.classList.add('selected');
+        
+                    // Get the selected option value
+                    var selectedOption = this.getAttribute('data-value');
+                    
+                    // Update the hidden input field with the selected option value
+                    document.getElementById('selected_option').value = selectedOption;
+                    
+                    var clickedOption = this; // Store a reference to the clicked option
+                    
+                    setTimeout(function() {
+                        clickedOption.closest('form').submit();
+                    }, 50); 
+                });
+            });
+        });
+        
+        
+    </script>
+</body>
+</html>

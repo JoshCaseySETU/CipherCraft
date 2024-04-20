@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <header>
+        <h1>Admin Panel</h1>
+        <div class="banner-buttons">
+            <button id="contentButton">Content</button>
+            <button id="quizButton">Quiz</button>
+        </div>
+    </header>
+    <main>
+        <div id="contentForm">
+            <form action="/fetch_module" method="post" id="moduleForm">
+                {% for module in range(1, 6) %}
+                    <button type="submit" name="module_number" value="{{ module }}">Module {{ module }}</button>
+                {% endfor %}
+            </form>
+        </div>
+        
+        {% if content %}
+            <textarea rows="20" cols="80">{{ content }}</textarea>
+        {% endif %}  
+          
+<div>
+    <form id="filterForm" method="GET" action="/admin">
+        <button type="submit" name="module_number" value="1">Module 1</button>
+        <button type="submit" name="module_number" value="2">Module 2</button>
+        <button type="submit" name="module_number" value="3">Module 3</button>
+        <button type="submit" name="module_number" value="4">Module 4</button>
+        <button type="submit" name="module_number" value="5">Module 5</button>
+        
+    </form>
+</div>
+
+<form method="POST" action="/admin">
+    <input type="hidden" name="module_number" value="{{ module_number }}">
+    <div id="quizForm" style="display: block;">    
+        <h2>Existing Questions:</h2>
+        <ul id="existingQuestions">
+            {% for question in questions %}
+                <li class="existingQuestion">
+                    <label for="question_text_{{ loop.index }}">Question:</label>
+                    <textarea name="question_text_{{ loop.index }}" rows="4" cols="50">{{ question.Question }}</textarea><br>
+                    <label for="option1_{{ loop.index }}">Option 1:</label>
+                    <input type="text" name="option1_{{ loop.index }}" value="{{ question.Option1 }}"><br>
+                    <label for="option2_{{ loop.index }}">Option 2:</label>
+                    <input type="text" name="option2_{{ loop.index }}" value="{{ question.Option2 }}"><br>
+                    <label for="option3_{{ loop.index }}">Option 3:</label>
+                    <input type="text" name="option3_{{ loop.index }}" value="{{ question.Option3 }}"><br>
+                    <label for="option4_{{ loop.index }}">Option 4:</label>
+                    <input type="text" name="option4_{{ loop.index }}" value="{{ question.Option4 }}"><br>
+                    <label for="correct_option_{{ loop.index }}">Correct Answer:</label>
+                    <input type="text" name="correct_option_{{ loop.index }}" value="{{ question.Correct }}"><br>
+                </li>
+                <button type="button" class="delete-question-btn" data-question="{{ question.Question }}">Delete Question</button>
+
+            {% endfor %}
+        </ul>
+        <button type="submit">Save Changes</button>
+
+        <form method="POST" action="/admin">
+            <input type="hidden" name="module_number" value="{{ module_number }}">
+            <div id="addQuestionForm" style="display: block;">    
+                <h2>Add New Question:</h2>
+                <label for="new_question_text">Question:</label>
+                <textarea name="new_question_text" rows="4" cols="50"></textarea><br>
+                <label for="new_option1">Option 1:</label>
+                <input type="text" name="new_option1"><br>
+                <label for="new_option2">Option 2:</label>
+                <input type="text" name="new_option2"><br>
+                <label for="new_option3">Option 3:</label>
+                <input type="text" name="new_option3"><br>
+                <label for="new_option4">Option 4:</label>
+                <input type="text" name="new_option4"><br>
+                <label for="new_correct_option">Correct Answer:</label>
+                <input type="text" name="new_correct_option"><br>
+                <button type="submit">Add Question</button>
+            </div>
+        </form>
+    </div>
+</form>
+    </main>
+    <footer>
+        Footer content here
+    </footer>
+
+    <script>
+        const contentButton = document.getElementById('contentButton');
+        const quizButton = document.getElementById('quizButton');
+        const contentForm = document.getElementById('contentForm');
+        const quizForm = document.getElementById('quizForm');
+
+        contentButton.addEventListener('click', function() {
+            contentForm.style.display = 'block';
+            quizForm.style.display = 'none';
+        });
+
+        quizButton.addEventListener('click', function() {
+            contentForm.style.display = 'none';
+            quizForm.style.display = 'block';
+        });
+        // Add event listeners to delete question buttons
+        document.querySelectorAll('.delete-question-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                // Get the question text from the button's data attribute
+                const questionText = button.getAttribute('data-question');
+                // Display confirmation modal
+                if (confirm(`Are you sure you want to delete the question: "${questionText}"?`)) {
+                    // If confirmed, submit the form with the question text to delete the question
+                    const form = document.createElement('form');
+                    form.method = 'POST';
+                    form.action = '/delete_question';
+                    const inputModule = document.createElement('input');
+                    inputModule.type = 'hidden';
+                    inputModule.name = 'module_number';
+                    inputModule.value = '{{ module_number }}'; // Insert actual module number here
+                    form.appendChild(inputModule);
+                    const inputQuestion = document.createElement('input');
+                    inputQuestion.type = 'hidden';
+                    inputQuestion.name = 'question_text';
+                    inputQuestion.value = questionText;
+                    form.appendChild(inputQuestion);
+                    document.body.appendChild(form);
+                    form.submit();
+                }
+            });
+        });
+    </script>      
+</body>
+</html>
+
+

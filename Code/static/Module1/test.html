@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cipher Test</title>
+    <script src="interactive.js"></script>  
+</head>
+<body>
+    <h1>Cipher Test</h1>
+
+
+    <button onclick="loadHieroglyphic()">Hieroglyphic</button>
+    <button onclick="loadCaesar()">Caesar Cipher</button>
+    <button onclick="loadVigenere()">Vigenère Cipher</button>
+    <button onclick="loadRailFence()">Rail Fence Cipher</button>
+
+    <div id="hieroglyphicSection" style="display:none;">
+        <h2>Hieroglyphic Encryption</h2>
+        <label for="hieroMessage">Message:</label>
+        <input type="text" id="hieroMessage">
+        <button onclick="testHieroglyphic()">Encrypt</button>
+        <p id="hieroEncrypted"></p>
+    </div>
+
+    <div id="caesarSection" style="display:none;">
+        <h2>Caesar Cipher Encryption</h2>
+        <label for="caesarMessage">Message:</label>
+        <input type="text" id="caesarMessage">
+        <label for="caesarShift">Shift Amount:</label>
+        <input type="number" id="caesarShift">
+        <button onclick="testCaesar()">Encrypt</button>
+        <p id="caesarEncrypted"></p>
+   
+        <h2>Frequency Analysis</h2>
+        <label for="frequencyMessage">Encrypted Message:</label>
+        <input type="text" id="frequencyMessage">
+        <button onclick="testFrequency()">Analyze Frequency</button>
+        <p id="frequencyResult"></p>
+    </div>
+
+
+    <div id="vigenereSection" style="display:none;">
+        <h2>Vigenère Cipher Encryption</h2>
+        <label for="vigenereMessage">Message:</label>
+        <input type="text" id="vigenereMessage">
+        <label for="vigenereKey">Key:</label>
+        <input type="text" id="vigenereKey">
+        <button onclick="testVigenere()">Encrypt</button>
+        <p id="vigenereEncrypted"></p>
+    
+        <h2>Vigenère Cipher Decryption</h2>
+        <label for="vigenereEncryptedMessage">Encrypted Message:</label>
+        <input type="text" id="vigenereEncryptedMessage">
+        <label for="vigenereDecryptionKey">Decryption Key:</label>
+        <input type="text" id="vigenereDecryptionKey">
+        <button onclick="testDecryptVigenere()">Decrypt</button>
+        <p id="vigenereDecrypted"></p>
+    </div>
+
+    <div id="railFenceSection" style="display:none;">
+        <h2>Rail Fence Cipher Encryption</h2>
+        <label for="railMessage">Message:</label>
+        <input type="text" id="railMessage">
+        <label for="railNumRails">Number of Rails:</label>
+        <input type="number" id="railNumRails">
+        <button onclick="testRailFence()">Encrypt</button>
+        <p id="railEncrypted"></p>
+    
+        <h2>Rail Fence Cipher Decryption</h2>
+        <label for="railEncryptedMessage">Encrypted Message:</label>
+        <input type="text" id="railEncryptedMessage">
+        <label for="railNumRailsDecryption">Number of Rails:</label>
+        <input type="number" id="railNumRailsDecryption">
+        <button onclick="testDecryptRailFence()">Decrypt</button>
+        <p id="railDecrypted"></p>
+    </div>
+
+    <script>
+
+        function loadHieroglyphic() {
+            document.getElementById('hieroglyphicSection').style.display = 'block';
+            document.getElementById('caesarSection').style.display = 'none';
+            document.getElementById('vigenereSection').style.display = 'none';
+            document.getElementById('railFenceSection').style.display = 'none';
+        }
+
+        function loadCaesar() {
+            document.getElementById('hieroglyphicSection').style.display = 'none';
+            document.getElementById('caesarSection').style.display = 'block';
+            document.getElementById('vigenereSection').style.display = 'none';
+            document.getElementById('railFenceSection').style.display = 'none';
+        }
+
+        function loadVigenere() {
+            document.getElementById('hieroglyphicSection').style.display = 'none';
+            document.getElementById('caesarSection').style.display = 'none';
+            document.getElementById('vigenereSection').style.display = 'block';
+            document.getElementById('railFenceSection').style.display = 'none';
+        }
+
+        function loadRailFence() {
+            document.getElementById('hieroglyphicSection').style.display = 'none';
+            document.getElementById('caesarSection').style.display = 'none';
+            document.getElementById('vigenereSection').style.display = 'none';
+            document.getElementById('railFenceSection').style.display = 'block';
+        }
+
+        function testHieroglyphic() {
+            const message = document.getElementById('hieroMessage').value;
+            const encryptedMessage = encryptHieroglyphic(message);
+            document.getElementById('hieroEncrypted').textContent = encryptedMessage;
+        }
+
+        function testCaesar() {
+            const message = document.getElementById('caesarMessage').value;
+            const shiftAmount = parseInt(document.getElementById('caesarShift').value);
+            const encryptedMessage = encryptCaesar(message, shiftAmount);
+            document.getElementById('caesarEncrypted').textContent = encryptedMessage;
+        }
+
+        function testFrequency() {
+            const encryptedMessage = document.getElementById('frequencyMessage').value;
+            const frequencies = frequencyAnalysis(encryptedMessage);
+            document.getElementById('frequencyResult').textContent = JSON.stringify(frequencies);
+        }
+
+        function testVigenere() {
+            const message = document.getElementById('vigenereMessage').value;
+            const key = document.getElementById('vigenereKey').value;
+            const encryptedMessage = encryptVigenere(message, key);
+            document.getElementById('vigenereEncrypted').textContent = encryptedMessage;
+        }
+
+        function testDecryptVigenere() {
+            const encryptedMessage = document.getElementById('vigenereEncryptedMessage').value;
+            const key = document.getElementById('vigenereDecryptionKey').value;
+            const decryptedMessage = decryptVigenere(encryptedMessage, key);
+            document.getElementById('vigenereDecrypted').textContent = decryptedMessage;
+        }
+
+        function testRailFence() {
+            const message = document.getElementById('railMessage').value;
+            const numRails = parseInt(document.getElementById('railNumRails').value);
+            const encryptedMessage = encryptFence(message, numRails);
+            document.getElementById('railEncrypted').textContent = encryptedMessage;
+        }
+
+        function testDecryptRailFence() {
+            const encryptedMessage = document.getElementById('railEncryptedMessage').value;
+            const numRails = parseInt(document.getElementById('railNumRailsDecryption').value);
+            const decryptedMessage = decryptFence(encryptedMessage, numRails);
+            document.getElementById('railDecrypted').textContent = decryptedMessage;
+        }
+
+
+    </script>
+</body>
+</html>
